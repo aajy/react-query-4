@@ -54,6 +54,15 @@
         font-size: 20px;
         color:rgb(0, 110, 255);
       }
+      .counter {
+        display: inline-block;
+        margin-top: 20px;
+        width:100px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        border: 2px solid #ff0;
+      }
     </style>
   </head>
   <body>
@@ -75,24 +84,28 @@
           if (parseInt(this.state.value) === this.state.first * this.state.second) {
             this.setState((preState)=>{
               return {
-                result:'정답: ' + preState.value,
+                value:'',
+                result:'정답: ' + preState.value + '! 다음 문제를 계속해서 풀어보세요.',
                 first: Math.ceil(Math.random() * 9),
                 second: Math.ceil(Math.random() * 9),
-                value:'',
                 counter: 0,
+                resultClass: 'true',
               }
             });
+            this.input.focus();
           } else {
             this.setState((preState)=>{
               return {
-                resultClass: 'false',
-                result:'땡',
                 value:'',
-                counter : preState.counter + 1
+                result:'땡',
+                counter : preState.counter + 1,
+                resultClass: 'false',
               }
             });
+            this.input.focus();
           }
         };
+        input;
 
         onChange = (e)=> this.setState({value: e.target.value})
 
@@ -102,12 +115,12 @@
               <div className="GuGuDanBox">
                 <div className="question">{ this.state.first } 곱하기 { this.state.second }는?</div>
                 <form onSubmit= { this.onSubmit }>
-                  <input type= "number" value= { this.state.value }
+                  <input ref={(c)=> {this.input = c;}} type= "number" value= { this.state.value }
                   onChange= { this.onChange } />
                   <button>입력!</button>
                 </form>
                 <div className={this.state.resultClass}>{ this.state.result}</div>
-                <div>{ this.state.counter }번 시도</div>
+                <span className="counter">{ this.state.counter }번 시도</span>
               </div>
             </React.Fragment>
           );

@@ -61,32 +61,35 @@
     <script type="text/babel">
       'use strict';
       class GuGuDan extends React.Component {
-        constructor(props) {
-          super(props);
-          this.state = {
-            first: Math.ceil(Math.random() * 9),
-            second: Math.ceil(Math.random() * 9),
-            value: '',
-            result: '',
-            resultClass: 'false',
-          };
-        }
+        state = {
+          first: Math.ceil(Math.random() * 9),
+          second: Math.ceil(Math.random() * 9),
+          value: '',
+          result: '',
+          counter: 0,
+          resultClass: 'false',
+        };
 
         onSubmit = (e) => {
           e.preventDefault();
           if (parseInt(this.state.value) === this.state.first * this.state.second) {
-            this.setState({
-              resultClass: 'true',
-              result: '정답입니다. 다음 문제를 계속 풀어보세요.',
-              first: Math.ceil(Math.random() * 9),
-              second: Math.ceil(Math.random() * 9),
-              value:'',
-            })
+            this.setState((preState)=>{
+              return {
+                result:'정답: ' + preState.value,
+                first: Math.ceil(Math.random() * 9),
+                second: Math.ceil(Math.random() * 9),
+                value:'',
+                counter: 0,
+              }
+            });
           } else {
-            this.setState({
-              resultClass: 'false',
-              result:'땡',
-              value:'',
+            this.setState((preState)=>{
+              return {
+                resultClass: 'false',
+                result:'땡',
+                value:'',
+                counter : preState.counter + 1
+              }
             });
           }
         };
@@ -95,15 +98,18 @@
 
         render() {
           return (
-            <div class="GuGuDanBox">
-              <div class="question">{ this.state.first } 곱하기 { this.state.second }는?</div>
-              <form onSubmit= { this.onSubmit }>
-                <input type= "number" value= { this.state.value }
-                onChange= { this.onChange } />
-                <button>입력!</button>
-              </form>
-              <div class={this.state.resultClass}>{ this.state.result}</div>
-            </div>
+            <React.Fragment>
+              <div className="GuGuDanBox">
+                <div className="question">{ this.state.first } 곱하기 { this.state.second }는?</div>
+                <form onSubmit= { this.onSubmit }>
+                  <input type= "number" value= { this.state.value }
+                  onChange= { this.onChange } />
+                  <button>입력!</button>
+                </form>
+                <div className={this.state.resultClass}>{ this.state.result}</div>
+                <div>{ this.state.counter }번 시도</div>
+              </div>
+            </React.Fragment>
           );
         }
       }

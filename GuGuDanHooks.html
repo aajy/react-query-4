@@ -88,9 +88,7 @@
       } else {
         setResult('땡');
         setValue('');
-        setFirst(Math.ceil(Math.random() * 9));
-        setSecond(Math.ceil(Math.random() * 9));
-        setCounter(counter + 1,);
+        setCounter((preCounter) => { return  preCounter +1 });
         setResultClass('false');
         inputRef.current.focus();
       }

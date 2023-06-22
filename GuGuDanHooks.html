@@ -1,0 +1,120 @@
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>구구단</title>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+    body {
+      background-color: #eee;
+      text-align: center;
+      position: relative;
+    }
+    .GuGuDanBox {
+      position: absolute;
+      left:50%;
+      top:50%;
+      transform: translate(-50%, -80%);
+      width: 600px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding:20px;
+      box-sizing: border-box;
+    }
+    .question {
+      font-size: 30px;
+      margin-bottom: 30px;
+    }
+    input {
+      width: 80%;
+      height:30px;
+      margin-right: 5%;
+      border-radius: 5px;
+      border:1px solid #eee;
+    }
+    form {
+      padding:10px;
+    }
+    button {
+      border:none;
+      width: 15%;
+      height:30px;
+      border-radius: 5px;
+      background: #85acff;
+      color:#fff;
+    }
+    .false {
+      font-size: 20px;
+      color:#f00;
+    }
+    .true {
+      font-size: 20px;
+      color:rgb(0, 110, 255);
+    }
+    .counter {
+      display: inline-block;
+      margin-top: 20px;
+      width:100px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ff0;
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div> <!-- 결과: <div id="root"><button>Like</button></div> -->
+<script type="text/babel">
+  const GuGuDan = () => {
+    const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+    const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9));
+    const [value, setValue] = React.useState('');
+    const [result, setResult] = React.useState('');
+    const [counter, setCounter] = React.useState(0);
+    const [resultClass, setResultClass] = React.useState('');
+    const inputRef = React.useRef(null); //useRef를 통해서 DOM에 접근한다. current 필수
+
+    const onSubmitForm = (e) => {
+      e.preventDefault();
+      if (parseInt(value) === first * second) {
+        setResult('정답: ' + value + '! 다음 문제를 계속해서 풀어보세요.');
+        setValue('');
+        setFirst(Math.ceil(Math.random() * 9));
+        setSecond(Math.ceil(Math.random() * 9));
+        setCounter(0);
+        setResultClass('true');
+        inputRef.current.focus();
+      } else {
+        setResult('땡');
+        setValue('');
+        setFirst(Math.ceil(Math.random() * 9));
+        setSecond(Math.ceil(Math.random() * 9));
+        setCounter(counter + 1,);
+        setResultClass('false');
+        inputRef.current.focus();
+      }
+    };
+
+    const onChangeForm = (e)=> setValue(e.target.value)
+    return (
+      <React.Fragment>
+        <div className="GuGuDanBox">
+          <div className="question">{ first } 곱하기 { second }는?</div>
+          <form onSubmit= { onSubmitForm }>
+            <input ref={inputRef} type= "number" value= { value }
+            onChange= { onChangeForm } />
+            <button>입력!</button>
+          </form>
+          <div className={resultClass}>{ result}</div>
+          <span className="counter">{ counter }번 시도</span>
+        </div>
+      </React.Fragment>
+    );
+  }
+</script>
+<script type="text/babel">
+  ReactDOM.render(<GuGuDan/>, document.querySelector('#root'));
+</script>
+</body>
+</html>
